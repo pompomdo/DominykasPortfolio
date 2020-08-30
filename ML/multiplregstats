@@ -1,0 +1,142 @@
+data <- data.frame(y = c(4, 3, 5, 6, 9), x1 = c(3, 4, 6, 8, 8), x2 = c(2, 6, 4, 7, 7))
+data
+
+
+# Using OLS method calculate the OLS-estimates for the β coefficients of regressio formula
+
+
+x <- as.matrix(cbind(1,data$x1,data$x2)) # Reading data frame as a matrix and including 1 as a constant for the intercept
+y <- as.matrix(data$y)
+
+beta <- solve(t(x)%*%x)%*%t(x)%*%y # The holy grail
+
+# Checking if calculations was correct with lm() function
+
+check <- lm(data$y~data$x1+data$x2)
+check
+
+check1 <- lm(data$y~data$x2+data$x1)
+check1
+
+library(foreign)
+
+sesame = read.spss("C:/Users/ddomi_000/PPLE 16-19/Machine Learning & Multivariate Statistics/Homework assignments (every Wednesday 10am)/SESAME.sav", to.data.frame = TRUE)
+
+sesame2 <- sesame[,c(8:12,14)]
+
+
+# A regression analysis was run on the Sesame Street (n=240) data set, predicting
+postbody from the following five pretest measures: prebody, prelet,
+preform, prenumb, and prerelat. The SPSS syntax for conducting a stepwise
+regression is given next. Note that this analysis obtains (in addition to other
+output): (1) variance inflation factors, (2) a list of all cases having a studentized
+residual greater than 2 in magnitude, (3) the smallest and largest values for the
+studentized residuals, Cook’s distance and centered leverage, (4) a histogram
+of the standardized residuals, and (5) a plot of the studentized residuals versus
+the standardized predicted y values.
+
+
+BothRegressionAnalysis = step(lm(POSTBODY ~ ., sesame2), direction="both")
+# Where '.' represents all data from sesame2 and direction = both represents stepwise regression. Whereas a model is chosen in terms of explained, and not being underfit or overfit by adding and removing variables from each possible model starting with the model with all predictor variables.  The model with lowest AIC is considered the "best" model, though, there might be equivalently good models.
+sum <- summary(BothRegressionAnalysis)
+BothRegressionAnalysis$anova
+sum
+
+influence.measures(BothRegressionAnalysis)
+
+
+
+### Computing the Stein estimate
+
+dim(sesame2)
+
+n <- dim(sesame2)[1]
+n
+
+k <- dim(sesame2)[2] - 1
+k
+
+R <- sum$r.squared
+R
+
+SteinP <- 1 - ((n-1)/(n-k-1))*((n-2)/(n-k-2))*((n+1)/n)*(1-R^2)
+SteinP
+#  What Stein's formula does is investigating the cross-validity predictive power of the regression model/equation. Meaning, that it checks whether the equation(or to what extent). So it tells how well the equation will predict outcome on different samples from the population.
+
+
+# Also, the general but unvalidated recommendation is to use all the predictor or the medium value of them. Then stein would be
+k1 <- (dim(sesame)[2]+dim(sesame2)[2]) /2 # A bigger k vaue, somewhat like middle point.
+
+SteinP1 <- 1 - ((n-1)/(n-k1-1))*((n-2)/(n-k1-2))*((n+1)/n)*(1-R^2)
+SteinP1 # Then the Stein's adjusted R^2 would be even lower, at 0.099. Meaning that regression equation does not have predictive value in other samples as compared to the one in which it was derived.
+
+
+
+# Calculating R2 square change using correlation matrix data.
+
+correlationmatrix <- cor(na.omit(sesame2))
+correlationmatrix
+
+#Semipartial correlation
+
+ry1 <- correlationmatrix[6,1]
+ry2 <- correlationmatrix[6,3]
+r21 <- correlationmatrix[3,1]
+ry21s <- (ry2 - ry1*r21)/(sqrt(1-(r21)^2)) # predictor 1 partialed out.
+ry21s
+
+# R squared
+RsquaredY12 <- (ry1)^2 + (ry21s)^2 # R squared with 1 partialed out from variable 2
+RsquaredY12
+
+Rsqry1 <- (ry1)^2 # R squared with variable 1
+Rsqry1
+
+answerf <- RsquaredY12 - Rsqry1
+# change
+answerf
+
+
+# Outliers
+
+i<-influence.measures(BothRegressionAnalysis)
+i
+i$infmat[,7]
+
+hat1 <- (2*3) / 240
+hat2 <- (3*3) / 240
+hat1
+hat2
+
+i1 <- abs(i$infmat[,7]) > hat1
+sum(i1)
+# 15 data points that are moderately unusual, above (2(k+1))/n
+
+i2 <- abs(i$infmat[,7]) > hat2
+sum(i2)
+
+influentialpoints <- abs(rstandard(BothRegressionAnalysis))>3 & abs(i$infmat[,7]) > hat2  # if the criteria is both high leverage and high standardized residual, then there are 0 influential points.
+sum(influentialpoints)
+
+# Outliers: COOOK'S D
+
+AnswerI <- abs(i$infmat[,6]) > 1
+# COOK's D
+sum(AnswerI)
+
+
+hist(i$infmat[,6])
+AnswerI1 <- abs(i$infmat[,6]) > 0.08
+# COOK's D above 0.08, from the distribution it can be seen that one case does not fall well in the cook's d distribution, this case could be referred to as influential case.
+sum(AnswerI1)
+
+
+
+plot(rstandard(BothRegressionAnalysis))
+abline(a=0,b=0)
+
+plot(predict(BothRegressionAnalysis),rstandard(BothRegressionAnalysis))
+abline(a=0,b=0)
+
+# Noramlity assumptions
+hist(rstandard(BothRegressionAnalysis)) # It appears rather reasonable, it is not perfect, but it the values are more or less clustered around the center. Moreso, the high sample size gives some more additional evidence for normality assumptions.
