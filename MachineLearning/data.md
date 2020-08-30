@@ -10,23 +10,26 @@ The model could achieve higher validation accuracy by adding new features(e.g. g
 
 # CNN
 
-### Installing required packages and frameworks: keras with Tensorflow end
+##### Installing required packages and frameworks: keras with Tensorflow end
 
-# Package to connect R and Python.
+##### Package to connect R and Python.
+
 if (!require('reticulate')) install.packages('reticulate')
 library(reticulate)
 
-# Package to install latest versions of other packages directly from github
+##### Package to install latest versions of other packages directly from github
+
 if (!require('devtools')) install.packages('devtools')
 library(devtools)
 
-# Package for image processing
+##### Package for image processing
+
 if (!require('BiocManager')) install.packages('BiocManager')
 library(BiocManager)
 BiocManager::install('EBImage')
 library(EBImage)
 
-# Package for deep neural architecture models, integrating artificial neural networks with deep learning.
+##### Package for deep neural architecture models, integrating artificial neural networks with deep learning.
 if(!require('keras')) devtools::install_github("rstudio/keras")
 library(keras)
 
@@ -36,24 +39,22 @@ install_keras(method="virtualenv", envname="myenv")
 Sys.setenv("CUDA_VISIBLE_DEVICES" = -1)
 
 
-### Data prep
+## Data prep
 
-# Specifying existing classes
+##### Specifying existing classes and number of classes
 class_list <- c("Model", "Product")
-
-# Specifying the number of classes
 output_n <- length(class_list)
 
-# Specifying image size for rescaling
+##### Specifying image size for rescaling
 img_width <- 150
 img_height <- 150
 target_size <- c(img_width, img_height)
 
-# Pictures contain all colours and are of high quality, thus RGB suffices here.
+##### Pictures contain all colours and are of high quality, thus RGB suffices here.
 channels <- RGB <- 3
 
 
-## Create a bunch of folders in a systemic and simple way. Also, rename and select pictures
+##### Create a bunch of folders in a systemic and simple way. Also, rename and select pictures
 base_dir <- "C:/Users/ddomi_000/Desktop/Otrium/SVM model/pictures_models_and_products"
 dir.create(base_dir)
 train_dir <- file.path(base_dir, "train")
@@ -63,26 +64,26 @@ dir.create(validation_dir)
 test_dir <- file.path(base_dir, "test")
 dir.create(test_dir)
 
-# Train folder
+##### Train folder
 train_model_dir <- file.path(train_dir, "model")
 dir.create(train_model_dir)
 train_product_dir <- file.path(train_dir, "product")
 dir.create(train_product_dir)
 
-# Validation folder
+##### Validation folder
 validation_model_dir <- file.path(validation_dir, "model")
 dir.create(validation_model_dir)
 validation_product_dir <- file.path(validation_dir, "product")
 dir.create(validation_product_dir)
 
-# Test folder
+##### Test folder
 test_model_dir <- file.path(test_dir, "model")
 dir.create(test_model_dir)
 test_product_dir <- file.path(test_dir, "product")
 dir.create(test_product_dir)
 
 
-# 2531 total number of pictures: model.
+##### 2531 total number of pictures: model.
 fnames <- paste0("model (", 1:1530, ").jpg")
 file.copy(file.path(original_dataset_dir, fnames),
           file.path(train_model_dir))
@@ -95,7 +96,7 @@ fnames <- paste0("model (", 2031:2531, ").jpg")
 file.copy(file.path(original_dataset_dir, fnames),
           file.path(test_model_dir))
 
-# 2799 total number of pictures: product.
+##### 2799 total number of pictures: product.
 fnames <- paste0("product (", 1:1530, ").jpg")
 file.copy(file.path(original_dataset_dir, fnames),
           file.path(train_product_dir))
@@ -109,8 +110,8 @@ file.copy(file.path(original_dataset_dir, fnames),
           file.path(test_product_dir))
 
 
-# Data processing into arrays using image processing function in Keras.
-# Converts a dataset of images into a matrix in .CSV file.
+### Data processing into arrays using image processing function in Keras.
+### Converts a dataset of images into a matrix in .CSV file.
 
 train_image_files_path <- "C:/Users/ddomi_000/Desktop/Otrium/SVM model/pictures_models_and_products/train"
 
@@ -167,7 +168,7 @@ train_image_array_gen$class_indices
 class_classes_indices <- train_image_array_gen$class_indices
 save(class_classes_indices, file = "/class_classes_indices.RData")
 
-# Finishing touches, identifying number of samples and specifying hyperparameters
+##### Finishing touches, identifying number of samples and specifying hyperparameters
 train_samples <- train_image_array_gen$n
 valid_samples <- valid_image_array_gen$n
 test_samples <- test_image_array_gen$n
@@ -175,12 +176,11 @@ test_samples <- test_image_array_gen$n
 batch_size <- 32
 epochs <- 10
 
-### Model
+## Model
 
-# Using keras and TensorFlow end
 model <- keras_model_sequential()
 
-# Adding layers 6 layers
+##### Adding layers 6 layers
 model %>%
   layer_conv_2d(filter = 32, kernel_size = c(3,3), padding = "same", input_shape = c(img_width, img_height, channels)) %>%
   layer_activation("relu") %>%
@@ -203,7 +203,7 @@ model %>%
   layer_dense(output_n) %>%
   layer_activation("softmax")
 
-# Compiling model
+  # Compiling model
 model %>% compile(
   loss = "categorical_crossentropy",
   optimizer = optimizer_rmsprop(lr = 0.0001, decay = 1e-6),
@@ -212,7 +212,7 @@ model %>% compile(
 
 
 
-# Fitting the model, visualizing results and evaluating
+## Fitting the model, visualizing results and evaluating
 
 hist <- model %>% fit_generator(
   train_image_array_gen,
@@ -230,6 +230,6 @@ hist <- model %>% fit_generator(
 plot(hist)
 
 
-# Evaluation & Prediction - train data
+##### Evaluation & Prediction - train data
 model %>% evaluate_generator(test_image_array_gen, steps=test_samples)
 model %>% predict_generator(test_image_array_gen, steps=test_samples)
