@@ -31,7 +31,7 @@ summary(xmod11)
 car::vif(xmod11)
 #Log regression excludes too many variables that positively contribute to model accuracy
 
-###### Results
+# Results
 predict_test <- predict(xmod11, newdata = test, type = "response")
 
 # make predictions on the test data
