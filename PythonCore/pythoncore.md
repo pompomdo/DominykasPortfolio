@@ -63,9 +63,9 @@ A more effective search relative on midpoint value.
 
 Sequencing based on train composition idea. More effective way of retrieving items.
 
-from collections import deque
+    from collections import deque
 
-class TrainComposition:
+    class TrainComposition:
 
     def __init__(self):
         self.tc = deque('')
@@ -120,9 +120,6 @@ class TrainComposition:
 
     def find_roots(a, b, c):
         sol1 = (-b + np.sqrt(b**2 - 4*a*c)) / (2*a)
-
-##### I don't think there is a +- functionality available in Python yet
-.
         sol2 = (-b - np.sqrt(b**2 - 4*a*c)) / (2*a)
         values_tuple = (sol1, sol2)
         return values_tuple
