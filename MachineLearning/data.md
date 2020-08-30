@@ -1,18 +1,16 @@
-#Short description:
+# Short description:
 
-# I use a variety of open source frameworks and educational resources available #online to build a Convolutional Neural Network (CNN) for image classification #problem.
-# The deep neural network architecture model was created to identify the differences
-# between pictures of fashion items in two formats. Format 1 is when a fashion item #is worn by a human model. In Format 2 a fashion item is the only thing in the  #picture, no #human body part sare present in the picture.
+I use a variety of open source frameworks and educational resources available online to build a Convolutional Neural Network (CNN) for image classification problem.
+The deep neural network architecture model was created to identify the differences between pictures of fashion items in two formats. Format 1 is when a fashion item is worn by a human model. In Format 2 a fashion item is the only thing in the picture, no human body parts are present in the picture.
 
-# It was trained on a small sample of 3080 pictures (equal split), and validation #sample containing 500 pictures for each format. After passing the ML algorithm for 10 times in mini batch mode samples, the model shows #99,2+% accuracy on training #samples and ~97% average on validation sample.
+It was trained on a small sample of 3080 pictures (equal split), and validation sample containing 500 pictures for each format. After passing the ML algorithm for 10 times in mini batch mode samples, the model shows **99,2+%** accuracy on training samples and **~97%** average on validation sample.
 
-# The model could achieve higher validation accuracy by adding new features(e.g. #grey scale; data augmentation in training sample), changes in the available data #(e.g. higher sample size) and optimization (parameter tuning).
+The model could achieve higher validation accuracy by adding new features(e.g. grey scale; data augmentation in training sample), changes in the available data (e.g. higher sample size) and optimization (parameter tuning).
 
 
-### CNN
+# CNN
 
-# Installing required packages and frameworks: keras with Tensorflow end
-
+### Installing required packages and frameworks: keras with Tensorflow end
 
 # Package to connect R and Python.
 if (!require('reticulate')) install.packages('reticulate')
