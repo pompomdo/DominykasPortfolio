@@ -192,18 +192,14 @@ model %>%
   layer_max_pooling_2d(pool_size = c(2,2)) %>%
   layer_dropout(0.25) %>%
 
-  # Flatten max filtered output into feature vector
-  # and feed into dense layer
   layer_flatten() %>%
   layer_dense(100) %>%
   layer_activation("relu") %>%
   layer_dropout(0.5) %>%
 
-  # Outputs from dense layer are projected onto output layer
   layer_dense(output_n) %>%
   layer_activation("softmax")
 
-  # Compiling model
 model %>% compile(
   loss = "categorical_crossentropy",
   optimizer = optimizer_rmsprop(lr = 0.0001, decay = 1e-6),
