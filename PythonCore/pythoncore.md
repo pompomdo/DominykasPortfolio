@@ -6,56 +6,56 @@ A batch of different Python exercises from resources online.
 
 A more effective search relative on midpoint value.
 
-def count_numbers(sorted_list, item):
-    begin_index = 0
-    end_index = len(sorted_list) - 1
-    value = 0
-    while begin_index <= end_index:
-        midpoint = begin_index + (end_index - begin_index) // 2
-        midpoint_value = sorted_list[midpoint]
-        if midpoint_value == item:
-            return midpoint
-        elif item < midpoint_value:
-            end_index = midpoint - 1
-        else:
-            begin_index = midpoint +1
-    for i in range(len(sorted_list)):
-        if sorted_list[i] < item:
-            value += 1
-    return value
+    def count_numbers(sorted_list, item):
+        begin_index = 0
+        end_index = len(sorted_list) - 1
+        value = 0
+        while begin_index <= end_index:
+            midpoint = begin_index + (end_index - begin_index) // 2
+            midpoint_value = sorted_list[midpoint]
+            if midpoint_value == item:
+                return midpoint
+            elif item < midpoint_value:
+                end_index = midpoint - 1
+            else:
+                begin_index = midpoint +1
+        for i in range(len(sorted_list)):
+            if sorted_list[i] < item:
+                value += 1
+        return value
 
-sorted_list = [5, 4, 5, 7]
+    sorted_list = [5, 4, 5, 7]
 
-print(count_numbers(sorted_list, 5)) # should print 2
+    print(count_numbers(sorted_list, 5)) # should print 2
 
 
 ### 1.B. DIFFERENT VERSION
 
-def count_numbers(sorted_list, item):
-    for j in sorted_list:
-        if item < j:
-            break
-        else: # binary sorted search for extra speed
-            begin_index = 0
-            end_index = len(sorted_list) - 1
-            value = 0
-            while begin_index <= end_index:
-                midpoint = begin_index + (end_index - begin_index) // 2
-                midpoint_value = sorted_list[midpoint]
-                if midpoint_value == item:
-                    return midpoint
-                elif item < midpoint_value:
-                    end_index = midpoint - 1
-                else:
-                    begin_index = midpoint +1
-            for i in range(len(sorted_list)):
-                if sorted_list[i] < item:
-                    value += 1
-            return value
+    def count_numbers(sorted_list, item):
+        for j in sorted_list:
+            if item < j:
+                break
+            else: # binary sorted search for extra speed
+                begin_index = 0
+                end_index = len(sorted_list) - 1
+                value = 0
+                while begin_index <= end_index:
+                    midpoint = begin_index + (end_index - begin_index) // 2
+                    midpoint_value = sorted_list[midpoint]
+                    if midpoint_value == item:
+                        return midpoint
+                    elif item < midpoint_value:
+                        end_index = midpoint - 1
+                    else:
+                        begin_index = midpoint +1
+                for i in range(len(sorted_list)):
+                    if sorted_list[i] < item:
+                        value += 1
+                return value
 
-sorted_list = [5, 5, 5, 4]
+    sorted_list = [5, 5, 5, 4]
 
-print(count_numbers(sorted_list, 4))
+    print(count_numbers(sorted_list, 4))
 
 
 
@@ -85,16 +85,16 @@ class TrainComposition:
     def detach_wagon_from_right(self):
         return self.tc.pop()
 
-if __name__ == "__main__":
-    train = TrainComposition()
-    train.attach_wagon_from_left(7)
-    train.attach_wagon_from_left(13)
-    train.attach_wagon_from_left(23)
-    train.attach_wagon_from_left(70)
-    train.attach_wagon_from_left(70)
-    train.attach_wagon_from_left(17)
-    print(train.detach_wagon_from_right()) # should print 7 (first added)
-    print(train.detach_wagon_from_left()) # should print 13 (second added)
+    if __name__ == "__main__":
+        train = TrainComposition()
+        train.attach_wagon_from_left(7)
+        train.attach_wagon_from_left(13)
+        train.attach_wagon_from_left(23)
+        train.attach_wagon_from_left(70)
+        train.attach_wagon_from_left(70)
+        train.attach_wagon_from_left(17)
+        print(train.detach_wagon_from_right()) # should print 7 (first added)
+        print(train.detach_wagon_from_left()) # should print 13 (second added)
 
 
 ### 3. GROUPING BY A COMMON FEATURE
@@ -120,7 +120,9 @@ if __name__ == "__main__":
 
     def find_roots(a, b, c):
         sol1 = (-b + np.sqrt(b**2 - 4*a*c)) / (2*a)
-##### I don't think there is a +- functionality available in Python yet.
+
+##### I don't think there is a +- functionality available in Python yet
+.
         sol2 = (-b - np.sqrt(b**2 - 4*a*c)) / (2*a)
         values_tuple = (sol1, sol2)
         return values_tuple
@@ -205,13 +207,13 @@ if __name__ == "__main__":
 
 ### 8. MERGING: REMAIN ONLY UNIQUE NAMES.
 
-def unique_names(names1, names2):
-    return list(set().union(names1,names2))
+    def unique_names(names1, names2):
+        return list(set().union(names1,names2))
 
-if __name__ == "__main__":
-    names1 = ["Ava", "Emma", "Olivia"]
-    names2 = ["Olivia", "Sophia", "Emma"]
-    print(unique_names(names1, names2)) # should print Ava, Emma, Olivia, Sophia
+    if __name__ == "__main__":
+        names1 = ["Ava", "Emma", "Olivia"]
+        names2 = ["Olivia", "Sophia", "Emma"]
+        print(unique_names(names1, names2)) # should print Ava, Emma, Olivia, Sophia
 
 
 ### 9. Road Planner / minimum cost path
@@ -277,21 +279,21 @@ class IceCreamMachine:
         return res
 
 
-machine = IceCreamMachine(["vanilla", "chocolate"], ["chocolate sauce"])
-print(machine.scoops()) #should print[['vanilla', 'chocolate sauce'], ['chocolate', 'chocolate sauce']]
+    machine = IceCreamMachine(["vanilla", "chocolate"], ["chocolate sauce"])
+    print(machine.scoops()) #should print[['vanilla', 'chocolate sauce'], ['chocolate', 'chocolate sauce']]
 
 
 ### 11. PIPELINE: COMBINING MULTIPLE FUNCTIONS IN A SEQUENCE.
 
-def pipeline(*funcs):
-    def helper(arg):
-        for f in funcs:
-            arg = f(arg)
-        return arg
-    return helper
+    def pipeline(*funcs):
+        def helper(arg):
+            for f in funcs:
+                arg = f(arg)
+            return arg
+        return helper
 
 
-fun = pipeline(lambda x: x * 3, lambda x: x + 1, lambda x: x / 2)
-print(fun(4))
+    fun = pipeline(lambda x: x * 3, lambda x: x + 1, lambda x: x / 2)
+    print(fun(4))
 
 ##### 12 > 13 > 6.5
