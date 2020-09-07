@@ -225,5 +225,5 @@ A statistical model to test hypothesis that number of visuals of products influe
     ```
 
     ```{r}
-    write.csv(xyz,"C:\\Users\\ddomi_000\\Desktop\\Otrium\\AnovaModel\\ANOVA.csv", row.names = FALSE)
+    write.csv(xyz,"...\\AnovaModel\\ANOVA.csv", row.names = FALSE)
     ```
